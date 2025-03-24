@@ -2,7 +2,9 @@ import requests
 import bs4
 
 # URL of the page to scrape
-URL = "https://www.concordia.ca/events.html"
+# URL = "https://www.concordia.ca/events.html"
+# Potential TODO : Add selection on startup for which audience to scrape from/have different audiences in the database to select from.
+URL = "https://www.concordia.ca/events.html?audience=concordia-community/students"
 # Get the page
 response = requests.get(URL)
 
@@ -14,8 +16,11 @@ soup = bs4.BeautifulSoup(file, "html5lib")
 
 
 # Get the events using BS4
+
 # TODO : Find a ways to get each event's properties (name, date, description) when they are not in the same div
-# HINT : use a dictionary to store strings that could identify the properties (example date: "Feb", "Jan"
+# Related TODO : Fix the location of event detection in the scraper
+
+# HINT : use a dictionary to store strings that could identify the properties (example date: "Feb", "Jan")
 def get_events():
     events = []
     event_html = soup.find_all("div", attrs={"class": "accordion"})
