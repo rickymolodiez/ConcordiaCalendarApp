@@ -20,6 +20,16 @@ soup = bs4.BeautifulSoup(file, "html5lib")
 # TODO : Find a ways to get each event's properties (name, date, description) when they are not in the same div
 # Related TODO : Fix the location of event detection in the scraper
 
+# TODO : Data should be structured this way in the DB :
+"""
+String: Event Category 
+Date: Date
+Time: Time
+String: Location
+String: Attendee Eligibility
+String: Event Descriptions
+"""
+
 # HINT : use a dictionary to store strings that could identify the properties (example date: "Feb", "Jan")
 def get_events():
     events = []
