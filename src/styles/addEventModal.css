@@ -1,0 +1,89 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-box {
+    background-color: #fff5f3;
+    border: 2px solid #8a2c3f;
+    border-radius: 15px;
+    padding: 20px 30px;
+    width: 450px;
+    max-width: 90%;
+    position: relative;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    color: #8a2c3f;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .close-btn {
+    cursor: pointer;
+    font-size: 24px;
+    color: #8a2c3f;
+  }
+  
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #8a2c3f;
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 2px solid #8a2c3f;
+    border-radius: 5px;
+    background: white;
+    font-size: 14px;
+    color: #8a2c3f;
+  }
+  
+  textarea {
+    height: 100px;
+    resize: none;
+  }
+  
+  .time-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .time-inputs input {
+    width: 80px;
+  }
+  
+  button.next-btn,
+  button.create-btn {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    background-color: #f8c7c2;
+    border: 2px solid #8a2c3f;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #8a2c3f;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
