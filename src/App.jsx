@@ -1,8 +1,15 @@
 import React from 'react'
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+// import { initializeApp } from "firebase/app";
+// import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useState, useEffect } from 'react';
+import "./App.css";
+import WeeklyCalendar from './components/WeeklyCalendar';
+import SidebarWidgets from './components/SIdeWidgets';
+import SearchDropdown from './components/SearchDropdown';
+import { db } from '../src/firebase'; // ✅ Fixes the 'db is not defined' error
+import AddEventModal from './components/AddEventModal'; // ✅ Make sure the path is correct
+
 
 const App = () => {
  
@@ -17,9 +24,35 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-const app = initializeApp(firebaseConfig);
+  
+const [subscriptions, setSubscriptions] = useState([]);
+const [showAddModal, setShowAddModal] = useState(false);
+// const [visibleClubs, setVisibleClubs] = useState(subscriptions);
 
-const db = getFirestore(app);
+const [visibleClubs, setVisibleClubs] = useState([]);
+
+useEffect(() => {
+  // Whenever subscriptions change, make all visible by default
+  setVisibleClubs(subscriptions);
+}, [subscriptions]);
+
+const handleVisibilityChange = (map) => {
+  const visible = Object.keys(map).filter(club => map[club]);
+  setVisibleClubs(visible);
+};
+
+  
+const handleSubscribe = (clubName) => {
+  setSubscriptions((prev) => 
+    prev.includes(clubName) ? prev : [...prev, clubName]
+  );
+};
+
+
+// const app = initializeApp(firebaseConfig);
+
+// const db = getFirestore(app);
+
 
 const [events, setEvents] = useState([]); 
 useEffect(() => {
@@ -40,22 +73,65 @@ useEffect(() => {
   
   return (
    
-    <div>
-    <h1 className='text-3xl font-bold underline'>Hello GDSC!</h1>
-    <ul className='mt-4'>
-      {events.length > 0 ? (
-        events.map((events, index) => (
-          <li key={index} className='border p-2 my-2 bg-gray-100'>
-            {JSON.stringify(events)}
-          </li>
-        ))
-      ) : (
-        <p>No Events found.</p>
-      )}
-    </ul>
+   <div id='container'>
+    <div id='navbarDiv' >
+   <div id='logoDiv' >
+   <img id="logo" src="../src/assets/ConUEventsLogo.png" alt="" />
+   </div>
+   <div id='searchAddEventDiv' >
+   {/* <div className="search-bar">
+   <img src="../src/assets/searchIcon.png" alt="Search" className="search-icon" />
+  <input type="text" placeholder="Search events, clubs and more..." />
+  <SearchDropdown onSubscribe={handleSubscribe} />
+
+</div> */}
+
+<div className="">
+   
+  <SearchDropdown onSubscribe={handleSubscribe} />
+
+  {showAddModal && (
+  <AddEventModal onClose={() => setShowAddModal(false)} />
+)}
+
+
+</div>
+   
+{/* <button className="add-event-btn click-effect">
+  <span>add event</span>
+  <img src="../src/assets/add.png" alt="Add" className="plus-icon" />
+</button> */}
+
+<button className="add-event-btn click-effect" onClick={() => setShowAddModal(true)}>
+  <span>add event</span>
+  <img src="../src/assets/add.png" alt="Add" className="plus-icon" />
+</button>
+
+   
+<div className="profile-icon click-effect">
+  <img src="../src/assets/userIcon.png" alt="Profile" />
+</div>
+   
+   
+
+   </div>
+   </div>
+    <div id='mainDiv' > 
+      <SidebarWidgets  subscriptions={subscriptions}
+  onVisibilityChange={handleVisibilityChange} ></SidebarWidgets>
+     
+   <div id='mySubscriptionsDiv' >
+
+   </div>
+   <div id='calendarDiv' >
+   <WeeklyCalendar subscriptions={visibleClubs} ></WeeklyCalendar>
+   </div>
+  
+   
+   </div>
   </div>
+
   )
 }
-
 
 export default App

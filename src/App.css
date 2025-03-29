@@ -1,1 +1,189 @@
 @import "tailwindcss";
+
+* {
+    -webkit-user-select: none !important; /* Safari */
+    -moz-user-select: none !important;    /* Firefox */
+    -ms-user-select: none !important;     /* IE/Edge */
+    user-select: none !important;         /* Standard */
+  
+    -webkit-user-drag: none !important;   /* Safari/Chrome */
+    -khtml-user-drag: none !important;    /* Konqueror */
+    -moz-user-drag: none !important;      /* Older Firefox */
+    -o-user-drag: none !important;        /* Opera */
+    user-drag: none !important;
+  
+    -webkit-touch-callout: none !important; /* Disables long-press context menu on Safari */
+  }
+  
+  
+  img, svg {
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+  
+  
+
+#container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+#navbarDiv{
+    height: 15vh;
+    width: 100vw;
+    background-color: #ffffff;
+    display: flex;
+}
+
+#calendarDiv{
+    height: 83vh;
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+}
+
+#mainDiv{
+    height: 83vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+
+#logoDiv{
+    height: 17vh;
+    width: 20vw;
+    display: flex;
+    align-items: center;
+    padding-bottom: 5vh;
+}
+
+#logo{
+
+}
+
+#searchAddEventDiv{
+    height: 17vh;
+    width: 80vw;
+    display: flex;
+    justify-content: right;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    height: 6vh;
+    background-color: #fff5f3; /* Soft pink background */
+    padding: 12px 12px;
+    margin-top: 3vh;
+    
+    border-radius: 2.3vw; /* Fully rounded */
+  }
+  
+  .search-icon {
+    width: 6vw;
+    position: relative;
+    right: 2vw;
+    margin-right: 10px;
+    object-fit: contain;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 2vh;
+    color: #b5838d; /* Muted rose text color */
+    font-weight: 600;
+    position: relative;
+    right: 4vw;
+    width: 17vw;
+  }
+  
+  .search-bar input::placeholder {
+    color: #b5838d;
+    font-weight: 600;
+    font-size: 1.8vh;
+    
+  }
+  
+  .add-event-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff5f3;
+    padding: 12px 12px;
+    border: none;
+    border-radius: 2.3vw;
+    height: 6vh;
+    cursor: pointer;
+    margin-top: 3vh;
+    margin-left: 0.5vw;
+  }
+  
+  .add-event-btn span {
+    color: #8a2c3f; /* Deep rose text color */
+    font-size: 2.2vh;
+    font-weight: 600;
+    margin-right: 10px;
+    position: relative;
+    left: 1vw;
+  }
+  
+  .plus-icon {
+    width: 6vh;
+    object-fit: contain;
+    position: relative;
+    left: 0.5vw;
+  }
+  
+  .profile-icon {
+    background-color: #fff5f3;
+    padding: 1vh;
+    border-radius: 50%;
+    width: 6vh;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3vh;
+    margin-right: 1.5vw;
+    margin-left: 0.5vw;
+  }
+  
+  .profile-icon img {
+    height: 15vh;
+    object-fit:cover;
+  }
+
+  .click-effect {
+    transition: transform 0.1s ease;
+  }
+  
+  .click-effect:active {
+    transform: scale(0.96);
+  }
+
+  .profile-icon:hover {
+    background-color: #6a443d; /* deep brown */
+  }
+  
+  .profile-icon:hover img {
+    filter: brightness(0) invert(1); /* turns icon white */
+  }
+
+  .add-event-btn:hover {
+    background-color: #8a2c3f;
+  }
+  
+  .add-event-btn:hover span {
+    color: #fff5f3;
+  }
+  
+  .add-event-btn:hover .plus-icon {
+    filter: brightness(0) invert(1); /* turns icon white */
+  }
+  
+  
