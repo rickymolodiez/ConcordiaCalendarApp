@@ -8,21 +8,26 @@ URL = "https://www.concordia.ca/events.html"
 # URL = "https://www.concordia.ca/events.html?audience=concordia-community/students"
 # Get the page
 
+# Solve file handling being weird for no reason
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+STORAGE_DIR = os.path.join(SCRIPT_DIR, "storage")
+EVENTS_FILE = os.path.join(STORAGE_DIR, "events.html")
 def get_page(): 
     response = requests.get(URL)
 
     if response.status_code == 200:
         print("Page found")
 
-        with open ("./storage/events.html", "w", encoding="utf-8") as file:
+        with open (EVENTS_FILE, "w", encoding="utf-8") as file:
             file.write(response.text)
 
 # Save the response to a file for processing
 # TODO : Add a timer to check how long ago the file was last updated and update if more than n days
-if not os.path.exists("./storage/events.html"):
+if not os.path.exists(EVENTS_FILE):
     html_content = get_page()
 else:
-    with open("./storage/events.html", "r", encoding="utf-8") as file:
+    with open(EVENTS_FILE, "r", encoding="utf-8") as file:
             html_content = file.read()
 
 soup = bs4.BeautifulSoup(html_content, "html5lib")
@@ -105,4 +110,4 @@ def get_events():
         print(f"\n")
     return events
 
-
+get_events()
