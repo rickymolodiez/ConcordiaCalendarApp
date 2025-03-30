@@ -57,7 +57,7 @@ def get_events():
         curevent = {}
         curevent['name'] = event.find("div", attrs={"class": "title"}).text.strip()
         rte_elements = event.find_all("div", attrs={"class": "rte"})
-
+        
         ## no string in RTE tags
         if not rte_elements:
                     curevent['description'] = "No description available"
