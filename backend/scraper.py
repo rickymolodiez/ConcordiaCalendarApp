@@ -44,11 +44,47 @@ String: Event Descriptions
 """
 
 def dateOrNot(parsedString):
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"", December"]
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     for month in months:
         if month.casefold() in parsedString.casefold():
             return 1
     return 0
+
+def descOrNot(parsedString):
+    if len(parsedString.split()) > 5: 
+        return True
+    return False
+
+
+def locationOrNot(parsedString):
+    location_keywords = ["campus", "building", "street", "room", "hall", "address", "online"]
+    for keyword in location_keywords:
+        if keyword.casefold() in parsedString.casefold():
+            return True
+    return False
+
+def matchRTE(rte_elements):
+    event_data = {
+        'description': "",
+        'date': "",
+        'location': "",
+    }
+
+    for rte in rte_elements:
+        clean_text = rte.get_text(strip=True)
+        if dateOrNot(clean_text):
+            event_data['date'] = clean_text
+        elif locationOrNot(clean_text):
+            event_data['location'] = clean_text
+        elif descOrNot(clean_text):
+            event_data['description'] = clean_text
+
+    if not event_data['location'] and event_data['description']:
+        event_data['location'] = event_data['description']
+        event_data['description'] = ""  
+
+    return event_data
+     
 
 def get_events():
     events = []
@@ -57,30 +93,16 @@ def get_events():
         curevent = {}
         curevent['name'] = event.find("div", attrs={"class": "title"}).text.strip()
         rte_elements = event.find_all("div", attrs={"class": "rte"})
-        
-        ## no string in RTE tags
-        if not rte_elements:
-                    curevent['description'] = "No description available"
-                    curevent['date'] = "No date available"
-        # only one of the RTE tags is populated
-        elif len(rte_elements) == 1:
-            rteStr = rte_elements[0].text.strip()
-            if dateOrNot(rteStr):
-                curevent['date'] = rteStr
-                curevent['description'] = "No description is available."
-            else:
-                curevent['description'] = rteStr
-                curevent['date'] = "No date available"  
-        ##both RTE tags are populated
-        else:
-            text1, text2 = rte_elements[0].text.strip(), rte_elements[1].text.strip()
-            if dateOrNot(text1):
-                curevent['date'], curevent['description'] = text1, text2 or "No description available"
-            elif dateOrNot(text2):
-                curevent['date'], curevent['description'] = text2, text1 or "No description available"
-            else:
-                curevent['description'], curevent['date'] = text1 or "No description available", text2 or "No date available"
-
-        events.append(curevent)
+        curevent.update(matchRTE(rte_elements))
+        if not curevent['date']:
+            curevent['date'] = "Not Available"
+        if not curevent['location']:
+            curevent['location'] = "Not Available"
+        if not curevent['description']:
+            curevent['description'] = "Not Available"
+        events.append(curevent)  
+        print(f"Current Event:\n Name: {curevent['name']}\n Date: {curevent['date']}\n Location: {curevent['location']}\n Description: {curevent['description']}\n " )
+        print(f"\n")
     return events
+
 
