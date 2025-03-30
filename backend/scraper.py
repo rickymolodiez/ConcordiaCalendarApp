@@ -1,6 +1,8 @@
 import requests
 import bs4
 import os
+from datetime import datetime, timedelta
+import re
 
 # URL of the page to scrape
 URL = "https://www.concordia.ca/events.html"
@@ -73,12 +75,21 @@ def matchRTE(rte_elements):
         'description': "",
         'date': "",
         'location': "",
+        'duration': 0,
     }
 
     for rte in rte_elements:
         clean_text = rte.get_text(strip=True)
         if dateOrNot(clean_text):
-            event_data['date'] = clean_text
+            try: 
+                dateobj, dur = parse_date(clean_text)
+                if dateobj:
+                    event_data['date'] = dateobj.isoformat()
+                    event_data['duration'] = dur
+                else:
+                    event_data['date'] = "Not Available"
+            except ValueError:
+                event_data['date'] = "Not Available"
         elif locationOrNot(clean_text):
             event_data['location'] = clean_text
         elif descOrNot(clean_text):
@@ -90,6 +101,62 @@ def matchRTE(rte_elements):
 
     return event_data
      
+
+def parse_date(date_string):
+    # Example date string: "April 1, 2025, 10 a.m. – 1 p.m."
+    parts = [part.strip() for part in date_string.split(",")]
+    if len(parts) >= 2:
+        date_str = f"{parts[0]}, {parts[1]}"
+    else:
+        date_str = date_string.strip()
+    
+    formats = [
+        "%B %d, %Y",
+        "%b %d, %Y"   
+    ]
+    date_obj = None
+    for fmt in formats:
+        try:
+            date_obj = datetime.strptime(date_str, fmt)
+            break
+        except ValueError:
+            continue
+
+    if not date_obj:
+        return None, 0
+    
+    start_datetime = datetime.combine(date_obj.date(), datetime.min.time())
+    duration = 0
+
+    if len(parts) >= 3:
+    
+        time_range_str = parts[2]
+        time_parts = re.split(r"[–-]", time_range_str)
+        if len(time_parts) >= 1:
+            start_time_str = time_parts[0].strip().replace(".", "")
+            def parse_time(ts):
+                for fmt in ("%I:%M %p", "%I %p"):
+                    try:
+                        return datetime.strptime(ts, fmt)
+                    except ValueError:
+                        pass
+                return None
+            start_time = parse_time(start_time_str)
+            if start_time:
+                # Combine date and start time.
+                start_datetime = datetime.combine(date_obj.date(), start_time.time())
+            if len(time_parts) == 2:
+                end_time_str = time_parts[1].strip().replace(".", "")
+                end_time = parse_time(end_time_str)
+                if start_time and end_time:
+                    end_dt = datetime.combine(date_obj.date(), end_time.time())
+                    diff = end_dt - start_datetime
+                    if diff.total_seconds() < 0:
+                        diff += timedelta(days=1)
+                    duration = int(diff.total_seconds() // 3600)
+    return start_datetime, duration
+
+
 
 def get_events():
     events = []
@@ -106,8 +173,6 @@ def get_events():
         if not curevent['description']:
             curevent['description'] = "Not Available"
         events.append(curevent)  
-        print(f"Current Event:\n Name: {curevent['name']}\n Date: {curevent['date']}\n Location: {curevent['location']}\n Description: {curevent['description']}\n " )
+        print(f"Current Event:\n Name: {curevent['name']}\n Date: {curevent['date']}\n Duration: {curevent['duration']} hours\n Location: {curevent['location']}\n Description: {curevent['description']}\n " )
         print(f"\n")
     return events
-
-get_events()
