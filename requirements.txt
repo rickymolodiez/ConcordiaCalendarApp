@@ -1,0 +1,4 @@
+bs4
+requests
+firebase_admin
+html5lib

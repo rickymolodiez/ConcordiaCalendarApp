@@ -1,18 +1,31 @@
 import requests
 import bs4
+import os
 
 # URL of the page to scrape
-# URL = "https://www.concordia.ca/events.html"
+URL = "https://www.concordia.ca/events.html"
 # Potential TODO : Add selection on startup for which audience to scrape from/have different audiences in the database to select from.
-URL = "https://www.concordia.ca/events.html?audience=concordia-community/students"
+# URL = "https://www.concordia.ca/events.html?audience=concordia-community/students"
 # Get the page
-response = requests.get(URL)
+
+def get_page(): 
+    response = requests.get(URL)
+
+    if response.status_code == 200:
+        print("Page found")
+
+        with open ("./storage/events.html", "w", encoding="utf-8") as file:
+            file.write(response.text)
 
 # Save the response to a file for processing
 # TODO : Add a timer to check how long ago the file was last updated and update if more than n days
-file = open("events.html", "w+")
-file.write(response.text)
-soup = bs4.BeautifulSoup(file, "html5lib")
+if not os.path.exists("./storage/events.html"):
+    html_content = get_page()
+else:
+    with open("./storage/events.html", "r", encoding="utf-8") as file:
+            html_content = file.read()
+
+soup = bs4.BeautifulSoup(html_content, "html5lib")
 
 
 # Get the events using BS4
@@ -34,6 +47,7 @@ String: Event Descriptions
 def get_events():
     events = []
     event_html = soup.find_all("div", attrs={"class": "accordion"})
+    print(f"Found {len(event_html)} events")
     for event in event_html:
         curevent = {}
         curevent['name'] = event.find("div", attrs={"class": "title"}).text.strip()
