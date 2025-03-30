@@ -1,10 +1,17 @@
 import firebase_admin
 import json
 from firebase_admin import credentials, firestore
+import os 
+
+# More fixes for path issues 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+AUTH_FILE = os.path.join(SCRIPT_DIR, "auth.json")
+
+
 
 from scraper import get_events
 # Initialize Firebase
-cred = credentials.Certificate("auth.json")
+cred = credentials.Certificate(AUTH_FILE)
 firebase_admin.initialize_app(cred)
 
 # Get the events
