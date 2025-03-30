@@ -5,7 +5,7 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useState, useEffect } from 'react';
 import "./App.css";
 import WeeklyCalendar from './components/WeeklyCalendar';
-import SidebarWidgets from './components/SIdeWidgets';
+import SidebarWidgets from './components/SideWidgets';
 import SearchDropdown from './components/SearchDropdown';
 import { db } from '../src/firebase'; // ✅ Fixes the 'db is not defined' error
 import AddEventModal from './components/AddEventModal'; // ✅ Make sure the path is correct
