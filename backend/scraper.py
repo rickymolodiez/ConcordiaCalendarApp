@@ -156,7 +156,19 @@ def parse_date(date_string):
                     duration = int(diff.total_seconds() // 3600)
     return start_datetime, duration
 
+def extract_category(event):
+    metadata = event.find("div", class_="filterMetadata")
+    category = "Not Available"
 
+    if metadata:
+        categories_element = metadata.find("span", class_="filterCategories")
+        if categories_element:
+            categories = categories_element.text.strip().split(',')
+            if categories: 
+                first_category = categories[0].strip()
+                category = first_category.split('/')[-1].split(':')[-1]
+
+    return category
 
 def get_events():
     events = []
@@ -166,6 +178,8 @@ def get_events():
         curevent['name'] = event.find("div", attrs={"class": "title"}).text.strip()
         rte_elements = event.find_all("div", attrs={"class": "rte"})
         curevent.update(matchRTE(rte_elements))
+        curevent['category'] = extract_category(event)
+
         if not curevent['date']:
             curevent['date'] = "Not Available"
         if not curevent['location']:
@@ -173,6 +187,6 @@ def get_events():
         if not curevent['description']:
             curevent['description'] = "Not Available"
         events.append(curevent)  
-        print(f"Current Event:\n Name: {curevent['name']}\n Date: {curevent['date']}\n Duration: {curevent['duration']} hours\n Location: {curevent['location']}\n Description: {curevent['description']}\n " )
+        print(f"Current Event:\n Name: {curevent['name']}\n Date: {curevent['date']}\n Duration: {curevent['duration']} hours\n Location: {curevent['location']}\n Description: {curevent['description']}\n Category: {curevent['category']}" )
         print(f"\n")
     return events
