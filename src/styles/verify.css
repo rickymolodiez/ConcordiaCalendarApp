@@ -1,0 +1,120 @@
+
+   .verify-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff5f3;
+}
+
+.verify-left {
+  width: 75%;
+  position: relative;
+  left: 50px;
+}
+
+.verify-left img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: relative;
+  right: 50px;
+  border-color: #8f2337;
+  border-right-width: 10px;
+}
+
+.verify-right {
+  width: 45%;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff5f3;
+  border-left: #8f2337;
+}
+
+.logo-text {
+  font-size: 32px;
+  font-weight: bold;
+  color: #8f2337;
+  margin-bottom: 40px;
+}
+
+.logo-highlight {
+  color: #ffbb55;
+  font-size: 38px;
+}
+
+.verify-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #8f2337;
+  color: #fff5f3;
+  padding: 25px 25px;
+  border-radius: 24px;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.verify-box h2 {
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.otp-input-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.otp-input-group input {
+  width: 45px;
+  height: 55px;
+  font-size: 24px;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+}
+
+.verify-btn {
+  width: 40%;
+  background-color: #8f2337;
+  color: #fefefe;
+  font-weight: bold;
+  padding: 10px 0;
+  margin-top: 10px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+}
+
+.footer-links {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.footer-links a {
+  color: #8a2c3f;
+  text-decoration: underline;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.otp-inputs{
+  display: flex;
+  width: 20vw;
+}
+
+.logo{
+  position: absolute;
+  height: 33vh;
+  right: 10vh;
+  top: 15vh;
+}
