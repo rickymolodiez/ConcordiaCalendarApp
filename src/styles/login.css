@@ -1,0 +1,132 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff5f3;
+  }
+  
+  .login-left {
+    width: 75%;
+    position: relative;
+    left: 50px;
+  }
+  
+  .login-left img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: relative;
+    right: 50px;
+    border-color: #8f2337;
+    border-right-width: 10px;
+  }
+  
+  .login-right {
+    width: 45%;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff5f3;
+    border-left: #8f2337;
+  }
+  
+  .logo-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #8f2337;
+    margin-bottom: 40px;
+  }
+  
+  .logo-highlight {
+    color: #ffbb55;
+    font-size: 38px;
+  }
+  
+  .login-box {
+    background-color: #8f2337;
+    color: #fff5f3;
+    padding: 25px 25px;
+    border-radius: 24px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .login-box h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1.4;
+  }
+  
+  .login-box label {
+    display: block;
+    text-align: left;
+    color: #fff;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 100;
+  }
+  
+  .login-box input {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  
+  .logo1{
+    position: absolute;
+    height: 33vh;
+    right: 10vh;
+    top: 4vh;
+  }
+  
+  .login-btn-div{
+    width: 25vw;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+  }
+  
+  .login-btn {
+    width: 40%;
+    background-color: #8f2337;
+    color: #fefefe;
+    font-weight: bold;
+    padding: 10px 0;
+    margin-top: 10px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .signup-text {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #8f2337;
+  }
+  
+  .signup-text span {
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .footer-links {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .footer-links a {
+    color: #8a2c3f;
+    text-decoration: underline;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  

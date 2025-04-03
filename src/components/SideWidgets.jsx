@@ -1,86 +1,7 @@
-
-// import React, { useEffect, useState } from 'react';
-// import '../styles/sideWidgets.css';
-// import { collection, getDocs } from 'firebase/firestore';
-// import { db } from '../firebase';
-
-// const SidebarWidgets = ({ subscriptions = [] }) => {
-//   const [nextEvent, setNextEvent] = useState(null);
-
-//   useEffect(() => {
-//     const fetchUpcoming = async () => {
-//       try {
-//         const snapshot = await getDocs(collection(db, "eventsFromApp"));
-//         const allEvents = snapshot.docs.map(doc => doc.data());
-
-//         // Only events by subscribed organizers
-//         const filtered = allEvents.filter(event =>
-//           subscriptions.includes(event.organizer)
-//         );
-
-//         const now = new Date();
-
-//         // Convert event date + time to Date objects and filter future events
-//         const upcoming = filtered
-//           .map(event => {
-//             const eventDateTime = new Date(`${event.date}T${String(event.startHour).padStart(2, '0')}:${String(event.startMinute).padStart(2, '0')}`);
-//             return { ...event, eventDateTime };
-//           })
-//           .filter(event => event.eventDateTime > now)
-//           .sort((a, b) => a.eventDateTime - b.eventDateTime);
-
-//         if (upcoming.length) {
-//           setNextEvent(upcoming[0]);
-//         }
-//       } catch (err) {
-//         console.error("Failed to fetch next event:", err);
-//       }
-//     };
-
-//     fetchUpcoming();
-//   }, [subscriptions]);
-
-//   return (
-//     <div className="sidebar-widgets">
-//       <div className="widget-box">
-//         <h2 className="widget-title">Next Event</h2>
-//         {nextEvent ? (
-//           <div className="next-event-details">
-//             <h3>{nextEvent.label}</h3>
-//             <p><strong>Organizer:</strong> {nextEvent.organizer}</p>
-//             <p><strong>Date:</strong> {nextEvent.date}</p>
-//             <p><strong>Time:</strong> {nextEvent.time}</p>
-//             <p><strong>Venue:</strong> {nextEvent.location}</p>
-//             <p><strong>Eligibility:</strong> {nextEvent.eligibility}</p>
-//             <p><strong>Category:</strong> {nextEvent.category}</p>
-//           </div>
-//         ) : (
-//           <p style={{ fontStyle: 'italic' }}>No upcoming events.</p>
-//         )}
-//       </div>
-
-//       <div className="widget-box">
-//         <h2 className="widget-title">My subscriptions</h2>
-//         <ul className="subscription-list">
-//           {subscriptions.map((club, index) => (
-//             <li key={index}>
-//               <span className="check-icon">✔</span> {club}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SidebarWidgets;
-
-
-
-import React, { useEffect, useState } from 'react';
-import '../styles/sideWidgets.css';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import React, { useEffect, useState } from "react";
+import "../styles/sideWidgets.css";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   const [nextEvent, setNextEvent] = useState(null);
@@ -89,7 +10,7 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   useEffect(() => {
     // Initialize visibilityMap when subscriptions change
     const initialMap = {};
-    subscriptions.forEach(club => {
+    subscriptions.forEach((club) => {
       initialMap[club] = true;
     });
     setVisibilityMap(initialMap);
@@ -98,25 +19,34 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   useEffect(() => {
     const fetchUpcoming = async () => {
       try {
-        const snapshot = await getDocs(collection(db, "eventsFromApp"));
-        const allEvents = snapshot.docs.map(doc => doc.data());
+        const snapshot1 = await getDocs(collection(db, "eventsFromApp"));
+        const snapshot2 = await getDocs(collection(db, "events"));
 
-        const filtered = allEvents.filter(event =>
-          subscriptions.includes(event.organizer)
-        );
+        const events1 = snapshot1.docs.map((doc) => doc.data());
 
-        const now = new Date();
-        const upcoming = filtered
-          .map(event => {
-            const eventDateTime = new Date(`${event.date}T${String(event.startHour).padStart(2, '0')}:${String(event.startMinute).padStart(2, '0')}`);
-            return { ...event, eventDateTime };
+        const events2 = snapshot2.docs
+          .map((doc) => {
+            const data = doc.data();
+            if (!data.date || isNaN(new Date(data.date))) return null;
+
+            const start = new Date(data.date);
+            const end = new Date(
+              start.getTime() + data.duration * 60 * 60 * 1000,
+            );
+
+            return {
+              label: data.name || "Untitled Event",
+              organizer: data.organizer || "Unknown",
+              date: start.toISOString().split("T")[0],
+              time: `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+              location: data.location || "N/A",
+              eligibility: "Open to all",
+              category: "General",
+            };
           })
-          .filter(event => event.eventDateTime > now)
-          .sort((a, b) => a.eventDateTime - b.eventDateTime);
+          .filter((e) => e); // ✅ remove invalid entries
 
-        if (upcoming.length) {
-          setNextEvent(upcoming[0]);
-        }
+        const allEvents = [...events1, ...events2];
       } catch (err) {
         console.error("Failed to fetch next event:", err);
       }
@@ -128,7 +58,7 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   const handleToggle = (club) => {
     const updated = {
       ...visibilityMap,
-      [club]: !visibilityMap[club]
+      [club]: !visibilityMap[club],
     };
     setVisibilityMap(updated);
     onVisibilityChange(updated); // Notify parent (like App.jsx)
@@ -141,15 +71,27 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
         {nextEvent ? (
           <div className="next-event-details">
             <h3>{nextEvent.label}</h3>
-            <p><strong>Organizer:</strong> {nextEvent.organizer}</p>
-            <p><strong>Date:</strong> {nextEvent.date}</p>
-            <p><strong>Time:</strong> {nextEvent.time}</p>
-            <p><strong>Venue:</strong> {nextEvent.location}</p>
-            <p><strong>Eligibility:</strong> {nextEvent.eligibility}</p>
-            <p><strong>Category:</strong> {nextEvent.category}</p>
+            <p>
+              <strong>Organizer:</strong> {nextEvent.organizer}
+            </p>
+            <p>
+              <strong>Date:</strong> {nextEvent.date}
+            </p>
+            <p>
+              <strong>Time:</strong> {nextEvent.time}
+            </p>
+            <p>
+              <strong>Venue:</strong> {nextEvent.location}
+            </p>
+            <p>
+              <strong>Eligibility:</strong> {nextEvent.eligibility}
+            </p>
+            <p>
+              <strong>Category:</strong> {nextEvent.category}
+            </p>
           </div>
         ) : (
-          <p style={{ fontStyle: 'italic' }}>No upcoming events.</p>
+          <p style={{ fontStyle: "italic" }}>No upcoming events.</p>
         )}
       </div>
 
