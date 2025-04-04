@@ -299,3 +299,33 @@ top: -1.2vh;
   text-decoration: underline;
 
 }
+
+.addToCalendar{
+  /* color: blue; */
+  position: relative;
+  left: 0.2vw;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    #4285F4 0%,
+    #EA4335 25%,
+    #FBBC05 50%,
+    #34A853 75%,
+    #4285F4 100%
+  );
+}
+
+#gcLogo{
+  height: 2vh;
+  position: relative;
+  top: 0.4vh;
+
+}
+
+#addCalendarDiv{
+  display: flex;
+  width: 100%;
+  margin-bottom: 1vh;
+}

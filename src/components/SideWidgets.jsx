@@ -15,7 +15,7 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
     });
     setVisibilityMap(initialMap);
   }, [subscriptions]);
-
+  
   useEffect(() => {
     const fetchUpcoming = async () => {
       try {
