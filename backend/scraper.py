@@ -167,6 +167,7 @@ def extract_category(event):
             if categories: 
                 first_category = categories[0].strip()
                 category = first_category.split('/')[-1].split(':')[-1]
+    return category
 
     return category
 
