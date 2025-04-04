@@ -6,7 +6,7 @@ import { db } from "../firebase";
 const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   const [nextEvent, setNextEvent] = useState(null);
   const [visibilityMap, setVisibilityMap] = useState({});
-
+  
   useEffect(() => {
     // Initialize visibilityMap when subscriptions change
     const initialMap = {};
@@ -21,39 +21,64 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
       try {
         const snapshot1 = await getDocs(collection(db, "eventsFromApp"));
         const snapshot2 = await getDocs(collection(db, "events"));
-
-        const events1 = snapshot1.docs.map((doc) => doc.data());
-
-        const events2 = snapshot2.docs
-          .map((doc) => {
-            const data = doc.data();
-            if (!data.date || isNaN(new Date(data.date))) return null;
-
-            const start = new Date(data.date);
-            const end = new Date(
-              start.getTime() + data.duration * 60 * 60 * 1000,
-            );
-
-            return {
-              label: data.name || "Untitled Event",
-              organizer: data.organizer || "Unknown",
-              date: start.toISOString().split("T")[0],
-              time: `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
-              location: data.location || "N/A",
-              eligibility: "Open to all",
-              category: "General",
-            };
-          })
-          .filter((e) => e); // ✅ remove invalid entries
-
-        const allEvents = [...events1, ...events2];
+  
+        const events1 = snapshot1.docs.map(doc => {
+          const data = doc.data();
+  
+          const startDateTime = new Date(`${data.date}T${String(data.startHour).padStart(2, '0')}:${String(data.startMinute).padStart(2, '0')}`);
+          
+          return {
+            ...data,
+            label: data.label || 'Untitled Event',
+            organizer: data.organizer || 'Unknown',
+            date: data.date,
+            time: data.time || 'N/A',
+            location: data.location || 'N/A',
+            eligibility: data.eligibility || 'Open to all',
+            category: data.category || 'General',
+            startDateTime
+          };
+        });
+  
+        const events2 = snapshot2.docs.map(doc => {
+          const data = doc.data();
+          if (!data.date || isNaN(new Date(data.date))) return null;
+  
+          const start = new Date(data.date);
+          const end = new Date(start.getTime() + data.duration * 60 * 60 * 1000);
+  
+          return {
+            label: data.name || "Untitled Event",
+            organizer: data.organizer || "Unknown",
+            date: start.toISOString().split("T")[0],
+            time: `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} – ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+            location: data.location || "N/A",
+            eligibility: "Open to all",
+            category: "General",
+            startDateTime: start
+          };
+        }).filter(e => e);
+  
+        // Combine and filter for subscriptions
+        const now = new Date();
+        const upcoming = [...events1, ...events2]
+          .filter(event => event.startDateTime > now && subscriptions.includes(event.organizer))
+          .sort((a, b) => a.startDateTime - b.startDateTime);
+  
+        if (upcoming.length > 0) {
+          setNextEvent(upcoming[0]);
+        } else {
+          setNextEvent(null);
+        }
+  
       } catch (err) {
         console.error("Failed to fetch next event:", err);
       }
     };
-
+  
     fetchUpcoming();
   }, [subscriptions]);
+  
 
   const handleToggle = (club) => {
     const updated = {
