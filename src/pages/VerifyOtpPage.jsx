@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Verify.css"; // ✅ Make this style match the UI
+import "../styles/verify.css"; // ✅ Make this style match the UI
 import backgroundImg from "../assets/hall3.png"; // 🏫 Your image
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
