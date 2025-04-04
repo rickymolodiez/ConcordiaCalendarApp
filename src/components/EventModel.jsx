@@ -10,8 +10,8 @@ const EventModal = ({ event, onClose }) => {
         <span className="close-button" onClick={onClose}>
           &times;
         </span>
-        <h2>{event.label}</h2>
-        <h4>{event.club}</h4>
+        <h2 id="eventHeading" >{event.label}</h2>
+        <h4 id="eventOrganizer">{event.organizer}</h4>
         <p>
           <strong>Event Category:</strong> {event.category}
         </p>
@@ -30,7 +30,7 @@ const EventModal = ({ event, onClose }) => {
         <p>
           <strong>Event Description:</strong> {event.description}
         </p>
-        <a href={event.registrationLink} target="_blank" rel="noreferrer">
+        <a id="eventLink" href={event.registrationLink} target="_blank" rel="noreferrer">
           Click here to register
         </a>
       </div>

@@ -283,3 +283,19 @@ font-weight: bold;
 text-transform: uppercase;
 }
 
+#eventHeading{
+font-size: 4vh;
+}
+
+#eventOrganizer{
+color: black;
+position: relative;
+top: -1.2vh;
+}
+
+#eventLink{
+  position: relative;
+  top: 1vh;
+  text-decoration: underline;
+
+}
