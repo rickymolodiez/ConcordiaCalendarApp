@@ -1,9 +1,12 @@
+
 import React from "react";
-import "../styles/calendar.css";
+import CLUB_COLORS from "../constants/clubColors";
 
 const CalendarEvent = ({ event, columnWidth, onClick }) => {
-  const top = parseFloat(event.startHour) * 60; // supports decimals
+  const top = parseFloat(event.startHour) * 60;
   const height = parseFloat(event.duration) * 60;
+
+  const eventColor = CLUB_COLORS[event.organizer] || "#fbb254"; // fallback
 
   const style = {
     position: "absolute",
@@ -11,11 +14,11 @@ const CalendarEvent = ({ event, columnWidth, onClick }) => {
     left: `${60 + event.day * columnWidth}px`,
     height: `${height}px`,
     width: `${columnWidth}px`,
-    backgroundColor: "#fbb254",
+    backgroundColor: eventColor,
     borderRadius: "10px",
     padding: "6px 8px",
     fontWeight: "bold",
-    color: "#8a2c3f",
+    color: "#fff",
     fontSize: "13px",
     boxSizing: "border-box",
     cursor: "pointer",
@@ -24,12 +27,16 @@ const CalendarEvent = ({ event, columnWidth, onClick }) => {
     flexDirection: "column",
     justifyContent: "flex-start",
     gap: "2px",
+    overflow: "hidden",        // hides any overflowing text
+    textOverflow: "ellipsis",  // adds ... to cut-off lines
+    whiteSpace: "normal"       // allows wrapping (use carefully with ellipsis)
+  
   };
 
   const secondaryTextStyle = {
     fontSize: "11px",
     fontWeight: "500",
-    color: "#7b2d2d",
+    color: "#fff",
   };
 
   return (

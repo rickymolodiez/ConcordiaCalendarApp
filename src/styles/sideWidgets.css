@@ -108,4 +108,31 @@
   color: #8a2c3f;
 }
 
+.manage-btn {
+  background: none;
+  border: none;
+  color: #8a2c3f;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.delete-sub-btn {
+  background: none;
+  border: none;
+  color: #b83a3a;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.delete-sub-btn:hover {
+  transform: scale(1.2);
+}
+
+
 

@@ -6,7 +6,7 @@ import EventModal from "../components/EventModel";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase"; // ✅ instead of initializing here
 
-const WeeklyCalendar = ({ subscriptions }) => {
+const WeeklyCalendar = ({ subscriptions = [] }) => {
   const weekDaysRef = useRef();
   const monthYearRef = useRef();
   const selectedDayRef = useRef();
@@ -15,7 +15,7 @@ const WeeklyCalendar = ({ subscriptions }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [events, setEvents] = useState([]);
-
+  
   const getWeekDates = () => {
     const start = getStartOfWeek(currentDate);
     const dates = [];
@@ -29,7 +29,7 @@ const WeeklyCalendar = ({ subscriptions }) => {
     }
     return dates;
   };
-
+  
   const getStartOfWeek = (date) => {
     const d = new Date(date);
     const day = d.getDay();
@@ -174,8 +174,9 @@ const WeeklyCalendar = ({ subscriptions }) => {
   }, []);
 
   const filteredEvents = events.filter((event) =>
-    subscriptions.includes(event.organizer),
+    Array.isArray(subscriptions) && subscriptions.includes(event.organizer)
   );
+  
 
   return (
     <div className="calendar-wrapper">

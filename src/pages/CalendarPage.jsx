@@ -170,6 +170,8 @@ const CalenderPage = () => {
         <SidebarWidgets
           subscriptions={subscriptions}
           onVisibilityChange={handleVisibilityChange}
+  
+  onDeleteSubscription={setSubscriptions} 
         ></SidebarWidgets>
 
         <div id="mySubscriptionsDiv"></div>
