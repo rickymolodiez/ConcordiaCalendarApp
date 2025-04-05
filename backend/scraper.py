@@ -284,6 +284,11 @@ def get_events():
             if rte_elements:
                 curevent.update(matchRTE(rte_elements))
             
+            try:
+                curevent['category'] = extract_category(event)
+            except Exception as e:
+                print(f"Error extracting category for '{curevent.get('category', 'Unknown event')}': {e}")
+
             # Add organizer information with better error handling
             try:
                 curevent['organizer'] = extract_organizer(event)
