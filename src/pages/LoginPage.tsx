@@ -3,10 +3,9 @@ import "../styles/login.css";
 import backgroundImg from "../assets/jmsb1.png";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase"; // make sure your firebase.js exports auth
 import { doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
@@ -84,7 +83,7 @@ const Login = () => {
           />
         </div>
 
-        <div class="login-btn-div">
+        <div className="login-btn-div">
           <button className="login-btn" onClick={handleLogin}>
             LOGIN
           </button>

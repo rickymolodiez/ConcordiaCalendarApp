@@ -4,9 +4,34 @@ import { db, auth } from "../firebase";
 import { collection, addDoc, getDocs, doc, getDoc } from "firebase/firestore";
 import emailjs from "emailjs-com";
 
-const AddEventModal = ({ onClose }) => {
+
+interface AddEventModalProps {
+  onClose: () => void;
+}
+
+interface FormData {
+  label: string;
+  category: string;
+  startHour: string;
+  startMinute: string;
+  endHour: string;
+  endMinute: string;
+  date: string;
+  organizer: string;
+  location: string;
+  eligibility: string;
+  description: string;
+  registrationLink: string;
+}
+
+interface Recipient {
+  email: string;
+  username: string;
+}
+
+const AddEventModal: React.FC<AddEventModalProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     label: "",
     category: "",
     startHour: "",
@@ -39,14 +64,14 @@ const AddEventModal = ({ onClose }) => {
     fetchOrganizer();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const formatTime = (hour, minute) => {
+  const formatTime = (hour:string, minute:string) => {
     const h = parseInt(hour);
     const m = minute.padStart(2, "0");
     const ampm = h >= 12 ? "PM" : "AM";
@@ -77,7 +102,7 @@ const AddEventModal = ({ onClose }) => {
 
       // 2️⃣ Notify subscribers
       const usersSnapshot = await getDocs(collection(db, "users"));
-      const recipients = [];
+      const recipients: Recipient[] = [];
 
       usersSnapshot.forEach((doc) => {
         const user = doc.data();

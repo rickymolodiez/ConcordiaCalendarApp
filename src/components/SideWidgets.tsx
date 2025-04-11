@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import "../styles/sideWidgets.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { Event, SidebarWidgetsProps } from "../types"; 
 
-const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
-  const [nextEvent, setNextEvent] = useState(null);
-  const [visibilityMap, setVisibilityMap] = useState({});
+
+
+const SidebarWidgets: React.FC<SidebarWidgetsProps> = ({ subscriptions = [], onVisibilityChange }) => {
+  const [nextEvent, setNextEvent] = useState<Event | null>(null);
+  const [visibilityMap, setVisibilityMap] = useState<Record<string, boolean>>({});
   
   useEffect(() => {
     // Initialize visibilityMap when subscriptions change
-    const initialMap = {};
+    const initialMap: Record<string, boolean> = {};
     subscriptions.forEach((club) => {
       initialMap[club] = true;
     });
@@ -42,12 +45,13 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   
         const events2 = snapshot2.docs.map(doc => {
           const data = doc.data();
-          if (!data.date || isNaN(new Date(data.date))) return null;
+          if (!data.date || isNaN(new Date(data.date).getTime())) return null;
   
           const start = new Date(data.date);
           const end = new Date(start.getTime() + data.duration * 60 * 60 * 1000);
   
           return {
+            ...data,
             label: data.name || "Untitled Event",
             organizer: data.organizer || "Unknown",
             date: start.toISOString().split("T")[0],
@@ -57,13 +61,13 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
             category: "General",
             startDateTime: start
           };
-        }).filter(e => e);
+        }).filter((e): e is Event => e !== null);
   
         // Combine and filter for subscriptions
         const now = new Date();
         const upcoming = [...events1, ...events2]
           .filter(event => event.startDateTime > now && subscriptions.includes(event.organizer))
-          .sort((a, b) => a.startDateTime - b.startDateTime);
+          .sort((a, b) => a.startDateTime.getTime() - b.startDateTime.getTime());
   
         if (upcoming.length > 0) {
           setNextEvent(upcoming[0]);
@@ -80,7 +84,7 @@ const SidebarWidgets = ({ subscriptions = [], onVisibilityChange }) => {
   }, [subscriptions]);
   
 
-  const handleToggle = (club) => {
+  const handleToggle = (club: string): void => {
     const updated = {
       ...visibilityMap,
       [club]: !visibilityMap[club],

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/calendar.css";
 import SearchDropdown from "./SearchDropdown";
-import CalendarEvent from "../components/CalendarEvent";
-import EventModal from "../components/EventModel";
+import CalendarEvent from "./CalendarEvent";
+import EventModal from "./EventModel";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase"; // ✅ instead of initializing here
 

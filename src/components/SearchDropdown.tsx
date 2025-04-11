@@ -3,7 +3,12 @@ import "../styles/searchDropDown.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase"; // Make sure your firebase export is correct
 
-const SearchDropdown = ({ onSubscribe }) => {
+interface onSubscribeProps {
+  onSubscribe: (event: any) => void;
+}
+
+
+const SearchDropdown: React.FC<onSubscribeProps>  = ({ onSubscribe }) => {
   const [query, setQuery] = useState("");
   const [allItems, setAllItems] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -16,7 +21,11 @@ const SearchDropdown = ({ onSubscribe }) => {
           getDocs(collection(db, "events")),
         ]);
 
-        const allResults = [];
+        interface SearchItem {
+          name: string;
+          type: "Event" | "Club";
+        }
+        const allResults: SearchItem[] = [];
 
         // 🔹 Process eventsFromApp
         fromAppSnap.forEach((doc) => {
@@ -55,7 +64,7 @@ const SearchDropdown = ({ onSubscribe }) => {
   }, []);
 
   // 🔍 Handle user typing in the input
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
 

@@ -1,11 +1,14 @@
 import React from "react";
 import "../styles/calendar.css";
+import { CalendarEventProps } from "../types";
 
-const CalendarEvent = ({ event, columnWidth, onClick }) => {
+
+
+const CalendarEvent: React.FC<CalendarEventProps> = ({ event, columnWidth, onClick }) => {
   const top = parseFloat(event.startHour) * 60; // supports decimals
   const height = parseFloat(event.duration) * 60;
 
-  const style = {
+  const style: React.CSSProperties = {
     position: "absolute",
     top: `${top}px`,
     left: `${60 + event.day * columnWidth}px`,
